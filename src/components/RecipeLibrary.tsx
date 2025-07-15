@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Clock, Users, Star, Lock, Play, X } from 'lucide-react';
+import { Clock, Users, Star, Lock, Play, X, Filter as FilterIcon } from 'lucide-react';
 import SubscriptionModal from './SubscriptionModal';
 import { AuthContext } from '../context/AuthContext';
 import AuthModal from './AuthModal';
@@ -14,6 +14,9 @@ const RecipeLibrary = () => {
   const [showCourseModal, setShowCourseModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCoursePayment, setShowCoursePayment] = useState(false);
+  const [moreFilter, setMoreFilter] = useState('');
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
   const { user } = useContext(AuthContext);
 
   const recipes = [
@@ -43,7 +46,8 @@ const RecipeLibrary = () => {
         "Drizzle with olive oil and sprinkle with salt.",
         "Bake for 10-12 minutes until crust is golden.",
         "Slice and serve hot."
-      ]
+      ],
+      filters: ["Vegetarian", "Diet", "Nationality food"]
     },
     {
       id: 2,
@@ -75,7 +79,8 @@ const RecipeLibrary = () => {
         "Bake for 1 hour.",
         "Rest for 10 minutes before carving.",
         "Serve with red wine reduction sauce."
-      ]
+      ],
+      filters: ["Diet", "Nationality food"]
     },
     {
       id: 3,
@@ -105,7 +110,8 @@ const RecipeLibrary = () => {
         "Pour into a prepared ramekin.",
         "Bake for 15-18 minutes.",
         "Serve warm with cream."
-      ]
+      ],
+      filters: ["Vegetarian", "Diet"]
     },
     {
       id: 4,
@@ -132,7 +138,8 @@ const RecipeLibrary = () => {
         "Roll sushi on a bamboo mat.",
         "Cut into pieces.",
         "Serve with wasabi, soy sauce, and pickled ginger."
-      ]
+      ],
+      filters: ["Pregnant mothers", "Nationality food", "Diet"]
     },
     {
       id: 5,
@@ -158,7 +165,8 @@ const RecipeLibrary = () => {
         "Roast vegetables in the oven.",
         "Mix tahini dressing.",
         "Combine all ingredients."
-      ]
+      ],
+      filters: ["Vegetarian", "Lactose Intolerant", "Diet"]
     },
     {
       id: 6,
@@ -185,7 +193,8 @@ const RecipeLibrary = () => {
         "Pipe onto baking sheets.",
         "Bake at 150°C (300°F) for 15-20 minutes.",
         "Let cool, then fill with ganache."
-      ]
+      ],
+      filters: ["Vegetarian", "Diet"]
     },
     {
       id: 7,
@@ -213,7 +222,8 @@ const RecipeLibrary = () => {
         "Add coconut milk and simmer.",
         "Add chicken and vegetables.",
         "Simmer until vegetables are tender."
-      ]
+      ],
+      filters: ["Ill people", "Diet", "Nationality food"]
     },
     {
       id: 8,
@@ -662,9 +672,20 @@ const RecipeLibrary = () => {
     }
   ];
 
+  const allFilters = [
+    "Vegetarian",
+    "Lactose Intolerant",
+    "Pregnant mothers",
+    "Ill people",
+    "Diet",
+    "Nationality food"
+  ];
+
   const filteredRecipes = recipes.filter(recipe => {
     if (filter === 'all') return true;
-    return recipe.type === filter;
+    if (filter === 'free' || filter === 'premium') return recipe.type === filter;
+    if (moreFilter) return recipe.filters && recipe.filters.includes(moreFilter);
+    return true;
   });
 
   // Show only first 6 recipes on main page
@@ -748,6 +769,15 @@ const RecipeLibrary = () => {
     ]
   };
 
+  const filterImages: Record<string, string> = {
+    "Vegetarian": "https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&w=400",
+    "Lactose Intolerant": "https://images.pexels.com/photos/461382/pexels-photo-461382.jpeg?auto=compress&w=400",
+    "Pregnant mothers": "https://images.pexels.com/photos/5428835/pexels-photo-5428835.jpeg?auto=compress&w=400", // Pregnant woman eating healthy
+    "Ill people": "https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?auto=compress&w=400",
+    "Diet": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&w=400", // Healthy salad bowl
+    "Nationality food": "https://images.pexels.com/photos/461382/pexels-photo-461382.jpeg?auto=compress&w=400"
+  };
+
   return (
     <>
       <section id="recipes" className="py-20 bg-gray-50">
@@ -762,32 +792,32 @@ const RecipeLibrary = () => {
           </div>
           {/* Filter Buttons */}
           <div className="flex justify-center mb-12">
-            <div className="bg-white rounded-full p-1 sm:p-2 shadow-lg flex flex-wrap justify-center">
+            <div className="bg-white rounded-full p-1 sm:p-2 shadow-lg flex flex-wrap justify-center items-center gap-2">
               <button
-                onClick={() => setFilter('all')}
+                onClick={() => { setFilter('all'); setMoreFilter(''); }}
                 className={`px-4 sm:px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 text-sm sm:text-base ${
-                  filter === 'all' 
-                    ? 'bg-amber-600 text-white shadow-lg' 
+                  filter === 'all' && !moreFilter
+                    ? 'bg-amber-600 text-white shadow-lg'
                     : 'text-gray-700 hover:bg-gray-100 hover:shadow-md'
                 }`}
               >
                 All Recipes
               </button>
               <button
-                onClick={() => setFilter('free')}
+                onClick={() => { setFilter('free'); setMoreFilter(''); }}
                 className={`px-4 sm:px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 text-sm sm:text-base ${
-                  filter === 'free' 
-                    ? 'bg-amber-600 text-white shadow-lg' 
+                  filter === 'free' && !moreFilter
+                    ? 'bg-amber-600 text-white shadow-lg'
                     : 'text-gray-700 hover:bg-gray-100 hover:shadow-md'
                 }`}
               >
                 Free
               </button>
               <button
-                onClick={() => setFilter('premium')}
+                onClick={() => { setFilter('premium'); setMoreFilter(''); }}
                 className={`px-4 sm:px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 text-sm sm:text-base ${
-                  filter === 'premium' 
-                    ? 'bg-amber-600 text-white shadow-lg' 
+                  filter === 'premium' && !moreFilter
+                    ? 'bg-amber-600 text-white shadow-lg'
                     : 'text-gray-700 hover:bg-gray-100 hover:shadow-md'
                 }`}
               >
@@ -803,14 +833,22 @@ const RecipeLibrary = () => {
             ))}
           </div>
 
-          {/* More Button */}
+          {/* More Button and Filter Button */}
           {hasMoreRecipes && (
-            <div className="text-center mt-12">
+            <div className="text-center mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
                 onClick={() => setShowAllRecipes(true)}
                 className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-amber-700 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 hover:shadow-xl active:scale-95"
               >
                 View All {filteredRecipes.length} Recipes
+              </button>
+              <button
+                onClick={() => setShowFilterModal(true)}
+                className="flex items-center gap-2 bg-gradient-to-r from-pink-500 via-amber-400 to-orange-400 text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:from-pink-600 hover:to-orange-500 transition-all duration-300 transform hover:scale-110 hover:shadow-2xl active:scale-95 border-4 border-white animate-pulse"
+                style={{ boxShadow: '0 4px 24px 0 rgba(255, 193, 7, 0.25)' }}
+              >
+                <FilterIcon className="w-6 h-6" />
+                Filter
               </button>
             </div>
           )}
@@ -1023,6 +1061,45 @@ const RecipeLibrary = () => {
               Pay $999
             </button>
             <p className="text-xs text-gray-500 mt-2">Your payment will be processed securely. You will receive a confirmation email once the course is unlocked.</p>
+          </div>
+        </div>
+      )}
+      {/* Filter Modal */}
+      {showFilterModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-gradient-to-br from-white via-amber-50 to-orange-100 rounded-3xl shadow-2xl max-w-md w-full p-6 relative border-4 border-amber-300">
+            <button
+              onClick={() => setShowFilterModal(false)}
+              className="absolute top-3 right-3 bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-full p-2 shadow-md transition-colors duration-200"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            <h2 className="text-2xl font-extrabold text-amber-700 mb-6 text-center drop-shadow">Filter Recipes</h2>
+            <div className="grid grid-cols-1 gap-4">
+              {allFilters.map(f => (
+                <button
+                  key={f}
+                  onClick={() => { setMoreFilter(f); setFilter(''); setShowFilterModal(false); }}
+                  className={`flex items-center gap-4 p-3 rounded-xl shadow border-2 border-amber-100 hover:bg-amber-50 hover:border-amber-400 transition-all duration-200 group ${moreFilter === f ? 'bg-amber-200 border-amber-500 scale-105' : 'bg-white'}`}
+                >
+                  <img
+                    src={filterImages[f]}
+                    alt={f}
+                    className="w-12 h-12 object-cover rounded-full border-2 border-amber-200 group-hover:border-amber-400 shadow"
+                  />
+                  <div className="flex flex-col items-start">
+                    <span className="text-base font-bold text-amber-700 group-hover:text-orange-600">{f}</span>
+                    <span className="text-xs text-gray-600">{f === 'Nationality food' ? 'Explore world cuisines' : `See ${f} recipes`}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+            {moreFilter && (
+              <div className="mt-6 text-center">
+                <span className="inline-block px-3 py-1 bg-amber-200 rounded-full text-amber-800 font-bold text-sm shadow">{moreFilter}</span>
+                <button onClick={() => setMoreFilter('')} className="ml-2 text-amber-600 text-base align-middle">&times;</button>
+              </div>
+            )}
           </div>
         </div>
       )}
