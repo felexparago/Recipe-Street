@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { X, Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
+import { captureUserData } from '../utils/webhookService';
+import { userDatabase } from '../utils/userDatabase';
 
 interface AuthModalProps {
   mode: 'signin' | 'signup';
@@ -18,6 +20,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose }) => {
     confirmPassword: ''
   });
   const [errors, setErrors] = useState<string[]>([]);
+  const [showReset, setShowReset] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
+  const [resetError, setResetError] = useState('');
 
   const { login, signup, isEmailRegistered } = useContext(AuthContext);
 
@@ -78,44 +84,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose }) => {
       }
 
       if (success) {
-        // Send webhook data for authentication
-        try {
-          const webhookData = {
-            action: currentMode === 'signin' ? 'user_signin' : 'user_signup',
-            email: formData.email,
-            name: formData.name || 'Not provided',
-            timestamp: new Date().toISOString(),
-            userAgent: navigator.userAgent,
-            source: 'Recipe Street Authentication',
-            submittedAt: new Date().toLocaleString('en-US', {
-              timeZone: 'Africa/Nairobi',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit'
-            }),
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-          };
-
-          console.log('Sending auth webhook data:', webhookData);
-
-          await fetch('https://hook.eu2.make.com/6eq3bci7l4cwwn4vg5ef24gcxdrzc2em', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            mode: 'cors',
-            body: JSON.stringify(webhookData)
-          });
-
-          console.log('Auth webhook sent successfully');
-        } catch (webhookError) {
-          console.error('Auth webhook error:', webhookError);
-          // Don't fail the auth process if webhook fails
-        }
+        // Capture user data for webhook
+        captureUserData('signin', {
+          action: currentMode === 'signin' ? 'user_signin' : 'user_signup',
+          email: formData.email,
+          name: formData.name || 'Not provided',
+          source: 'Recipe Street Authentication'
+        });
 
         onClose();
       } else {
@@ -125,6 +100,28 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose }) => {
       setErrors(['An error occurred. Please try again.']);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePasswordReset = (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetMessage('');
+    setResetError('');
+    if (!resetEmail || !/\S+@\S+\.\S+/.test(resetEmail)) {
+      setResetError('Please enter a valid email address.');
+      return;
+    }
+    const user = userDatabase.findUserByEmail(resetEmail);
+    if (user) {
+      user.password = '123456';
+      const users = userDatabase.getAllUsers().map(u =>
+        u.email.toLowerCase() === resetEmail.toLowerCase() ? { ...u, password: '123456' } : u
+      );
+      localStorage.setItem('recipe_street_users', JSON.stringify(users));
+      setResetMessage('Your password has been reset to 123456. Please sign in and change it.');
+      setResetError('');
+    } else {
+      setResetError('No account found with that email.');
     }
   };
 
@@ -241,6 +238,35 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose }) => {
           </button>
         </form>
 
+        {showReset ? (
+          <div className="mt-6">
+            <form onSubmit={handlePasswordReset} className="space-y-4">
+              <input
+                type="email"
+                placeholder="Enter your account email"
+                value={resetEmail}
+                onChange={e => setResetEmail(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              />
+              <button
+                type="submit"
+                className="w-full bg-amber-600 text-white py-3 rounded-lg font-bold hover:bg-amber-700 transition-colors"
+              >
+                Reset Password
+              </button>
+              <button
+                type="button"
+                onClick={() => { setShowReset(false); setResetMessage(''); setResetError(''); }}
+                className="w-full bg-gray-500 text-white py-3 rounded-lg font-bold hover:bg-gray-600 transition-colors"
+              >
+                Cancel
+              </button>
+              {resetMessage && <div className="mt-2 text-green-700 text-center">{resetMessage}</div>}
+              {resetError && <div className="mt-2 text-red-600 text-center">{resetError}</div>}
+            </form>
+          </div>
+        ) : null}
+
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             {currentMode === 'signin' ? "Don't have an account? " : "Already have an account? "}
@@ -253,9 +279,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose }) => {
           </p>
         </div>
 
-        {currentMode === 'signin' && (
+        {currentMode === 'signin' && !showReset && (
           <div className="mt-4 text-center">
-            <button className="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200">
+            <button
+              className="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200"
+              onClick={() => setShowReset(true)}
+            >
               Forgot your password?
             </button>
           </div>

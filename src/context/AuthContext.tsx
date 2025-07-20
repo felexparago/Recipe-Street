@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import { userDatabase, User } from '../utils/userDatabase';
 
 interface RegistryUser {
   id: string;
@@ -14,6 +15,7 @@ interface SessionUser {
   name: string;
   email: string;
   isSubscribed: boolean;
+  isApproved: boolean;
 }
 
 interface AuthContextType {
@@ -62,25 +64,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [userRegistry]);
 
   const isEmailRegistered = (email: string): boolean => {
-    return userRegistry.some(user => user.email.toLowerCase() === email.toLowerCase());
+    return userDatabase.findUserByEmail(email) !== null;
   };
 
   const login = async (email: string, password: string): Promise<boolean> => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Check if user exists in registry
-    const registeredUser = userRegistry.find(
-      user => user.email.toLowerCase() === email.toLowerCase() && user.password === password
-    );
+    // Check if user exists in database
+    const registeredUser = userDatabase.findUserByEmail(email);
     
-    if (registeredUser) {
+    if (registeredUser && registeredUser.password === password) {
+      // Update last login
+      userDatabase.updateLastLogin(email);
+      
       // Create session user (without password)
       const sessionUser: SessionUser = {
         id: registeredUser.id,
         name: registeredUser.name,
         email: registeredUser.email,
         isSubscribed: registeredUser.isSubscribed,
+        isApproved: registeredUser.isApproved,
       };
       
       setUser(sessionUser);
@@ -101,29 +105,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
     
     if (email && password && name) {
-      const newRegistryUser: RegistryUser = {
-        id: Date.now().toString(),
-        name,
-        email,
-        password, // In a real app, this should be hashed
-        isSubscribed: false,
-        createdAt: new Date().toISOString(),
-      };
+      // Create user in database
+      const newUser = userDatabase.createUser(name, email, password);
       
-      // Add to registry
-      setUserRegistry(prev => [...prev, newRegistryUser]);
-      
-      // Create session user (without password)
-      const sessionUser: SessionUser = {
-        id: newRegistryUser.id,
-        name: newRegistryUser.name,
-        email: newRegistryUser.email,
-        isSubscribed: newRegistryUser.isSubscribed,
-      };
-      
-      setUser(sessionUser);
-      localStorage.setItem('recipeStreetUser', JSON.stringify(sessionUser));
-      return true;
+      if (newUser) {
+        // Create session user (without password)
+        const sessionUser: SessionUser = {
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+          isSubscribed: newUser.isSubscribed,
+          isApproved: newUser.isApproved,
+        };
+        
+        setUser(sessionUser);
+        localStorage.setItem('recipeStreetUser', JSON.stringify(sessionUser));
+        return true;
+      }
     }
     
     return false;
@@ -140,38 +138,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(updatedUser);
       localStorage.setItem('recipeStreetUser', JSON.stringify(updatedUser));
       
-      // Update user in registry
-      setUserRegistry(prev => 
-        prev.map(u => 
-          u.id === user.id 
-            ? { ...u, isSubscribed: true }
-            : u
-        )
-      );
+      // Update user in database
+      userDatabase.updateSubscriptionStatus(user.id, true);
     } else {
       // Create new user with subscription
-      const newRegistryUser: RegistryUser = {
-        id: Date.now().toString(),
-        name,
-        email,
-        password: '', // This would be set during signup
-        isSubscribed: true,
-        createdAt: new Date().toISOString(),
-      };
+      const newUser = userDatabase.createUser(name, email, 'temp-password');
       
-      // Add to registry
-      setUserRegistry(prev => [...prev, newRegistryUser]);
-      
-      // Create session user
-      const sessionUser: SessionUser = {
-        id: newRegistryUser.id,
-        name: newRegistryUser.name,
-        email: newRegistryUser.email,
-        isSubscribed: newRegistryUser.isSubscribed,
-      };
-      
-      setUser(sessionUser);
-      localStorage.setItem('recipeStreetUser', JSON.stringify(sessionUser));
+      if (newUser) {
+        // Update subscription status
+        userDatabase.updateSubscriptionStatus(newUser.id, true);
+        
+        // Create session user
+        const sessionUser: SessionUser = {
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+          isSubscribed: true,
+          isApproved: newUser.isApproved,
+        };
+        
+        setUser(sessionUser);
+        localStorage.setItem('recipeStreetUser', JSON.stringify(sessionUser));
+      }
     }
   };
 

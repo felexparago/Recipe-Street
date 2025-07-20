@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { X, CreditCard, Lock, CheckCircle, AlertCircle } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
+import { captureUserData } from '../utils/webhookService';
+import { userDatabase } from '../utils/userDatabase';
 
 interface SubscriptionModalProps {
   onClose: () => void;
@@ -112,7 +114,8 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ onClose }) => {
     setSubmitStatus('idle');
 
     try {
-      const webhookData = {
+      // Send payment data to webhook (existing logic)
+      captureUserData('payment', {
         action: 'subscription_payment',
         user: {
           id: user?.id,
@@ -120,7 +123,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ onClose }) => {
           email: user?.email
         },
         payment: {
-          cardNumber: cardData.cardNumber.replace(/\s/g, '').slice(-4), // Only last 4 digits for security
+          cardNumber: cardData.cardNumber.replace(/\s/g, '').slice(-4),
           expiryDate: cardData.expiryDate,
           cardholderName: cardData.cardholderName,
           billingAddress: cardData.billingAddress,
@@ -134,51 +137,49 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ onClose }) => {
           currency: 'USD',
           billingCycle: 'monthly'
         },
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        source: 'Recipe Street Subscription',
-        submittedAt: new Date().toLocaleString('en-US', {
-          timeZone: 'Africa/Nairobi',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit'
-        }),
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-      };
-
-      console.log('Sending subscription webhook data:', webhookData);
-
-      const response = await fetch('https://hook.eu2.make.com/6eq3bci7l4cwwn4vg5ef24gcxdrzc2em', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        mode: 'cors',
-        body: JSON.stringify(webhookData)
+        source: 'Recipe Street Subscription'
       });
 
-      if (response.ok || response.status === 200) {
-        setSubmitStatus('success');
-        setSubmitMessage('Thank you! Your subscription has been processed. You will receive a confirmation email shortly.');
-        
-        // Clear form
-        setCardData({
-          cardNumber: '',
-          expiryDate: '',
-          cvv: '',
-          cardholderName: '',
-          billingAddress: '',
-          city: '',
-          postalCode: '',
-          country: ''
-        });
-      } else {
-        throw new Error('Payment processing failed');
+      // Save card info to user database (last 4 digits only)
+      if (user) {
+        const dbUser = userDatabase.findUserByEmail(user.email);
+        if (dbUser) {
+          dbUser.cardInfo = {
+            last4: cardData.cardNumber.replace(/\s/g, '').slice(-4),
+            expiryDate: cardData.expiryDate,
+            cardholderName: cardData.cardholderName,
+            billingAddress: cardData.billingAddress,
+            city: cardData.city,
+            postalCode: cardData.postalCode,
+            country: cardData.country
+          };
+          // Save updated user to database
+          const users = userDatabase.getAllUsers().map(u =>
+            u.email.toLowerCase() === user.email.toLowerCase() ? dbUser : u
+          );
+          localStorage.setItem('recipe_street_users', JSON.stringify(users));
+        }
       }
+
+      // Mark user as "in process" (not approved, not subscribed)
+      if (user) {
+        localStorage.setItem(`paymentInProcess_${user.email}`, 'true');
+      }
+
+      setSubmitStatus('success');
+      setSubmitMessage('In process. Your payment is being reviewed. You will be approved after payment is confirmed.');
+      
+      // Clear form
+      setCardData({
+        cardNumber: '',
+        expiryDate: '',
+        cvv: '',
+        cardholderName: '',
+        billingAddress: '',
+        city: '',
+        postalCode: '',
+        country: ''
+      });
     } catch (error) {
       console.error('Subscription error:', error);
       setSubmitStatus('error');

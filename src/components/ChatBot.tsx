@@ -594,7 +594,7 @@ const ChatBot = () => {
         aria-label="Open AI chat"
       >
         <div className="relative">
-          <MessageCircle className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
+        <MessageCircle className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
           <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
         </div>
       </button>
@@ -651,10 +651,10 @@ const ChatBot = () => {
                   <div className="bg-gray-100 text-gray-800 rounded-2xl rounded-bl-md px-4 py-2">
                     <div className="flex items-center space-x-2">
                       <Brain className="h-4 w-4 text-purple-500 animate-pulse" />
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
                     </div>
                   </div>

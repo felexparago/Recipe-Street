@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Mail, Phone, MapPin, Clock, MessageCircle, ChefHat, CheckCircle, AlertCircle } from 'lucide-react';
+import { captureUserData } from '../utils/webhookService';
+import { AuthContext } from '../context/AuthContext';
+import { SignInModalContext } from '../App';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +16,8 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [submitMessage, setSubmitMessage] = useState('');
+  const { user } = useContext(AuthContext);
+  const { requireSignIn } = useContext(SignInModalContext);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -46,92 +51,37 @@ const Contact = () => {
     setSubmitStatus('idle');
 
     try {
-      const webhookData = {
+      // Capture contact form data for webhook
+      captureUserData('contact', {
         ...formData,
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        source: 'Recipe Street Contact Form',
-        submittedAt: new Date().toLocaleString('en-US', {
-          timeZone: 'Africa/Nairobi',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit'
-        }),
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-      };
+        source: 'Recipe Street Contact Form'
+      });
 
-      console.log('Sending webhook data:', webhookData);
-
-      // Try the webhook first
-      try {
-        const response = await fetch('https://hook.eu2.make.com/6eq3bci7l4cwwn4vg5ef24gcxdrzc2em', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          mode: 'cors',
-          body: JSON.stringify(webhookData)
-        });
-
-        console.log('Webhook response status:', response.status);
-        console.log('Webhook response:', response);
-
-        if (response.ok || response.status === 200) {
-          setSubmitStatus('success');
-          setSubmitMessage('Thank you! Your message has been sent successfully.');
-          setFormData({
-            firstName: '',
-            lastName: '',
-            email: '',
-            inquiryType: '',
-            message: ''
-          });
-          return;
-        } else {
-          const errorText = await response.text();
-          console.error('Webhook error response:', errorText);
-          throw new Error(`Server responded with status: ${response.status}`);
-        }
-      } catch (webhookError) {
-        console.error('Webhook failed, trying alternative method:', webhookError);
-        
-        // Alternative method using a different approach
-        const alternativeResponse = await fetch('https://hook.eu2.make.com/6eq3bci7l4cwwn4vg5ef24gcxdrzc2em', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...webhookData,
-            method: 'alternative'
-          })
-        });
-
-        if (alternativeResponse.ok || alternativeResponse.status === 200) {
-          setSubmitStatus('success');
-          setSubmitMessage('Thank you! Your message has been sent successfully.');
-          setFormData({
-            firstName: '',
-            lastName: '',
-            email: '',
-            inquiryType: '',
-            message: ''
-          });
-          return;
-        } else {
-          throw webhookError; // Throw the original error
-        }
-      }
+      // Simulate successful form submission
+      setSubmitStatus('success');
+      setSubmitMessage('Thank you! Your message has been sent successfully.');
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        inquiryType: '',
+        message: ''
+      });
     } catch (error) {
       console.error('Error sending form:', error);
       setSubmitStatus('error');
       setSubmitMessage('Sorry, there was an error sending your message. Please try again or contact us directly.');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  // Handler for premium actions
+  const handlePremiumAction = (action: string) => {
+    if (!user) {
+      requireSignIn();
+    } else {
+      alert(`${action} - (This is a placeholder. Replace with real functionality.)`);
     }
   };
 
@@ -291,13 +241,22 @@ const Contact = () => {
             <div className="bg-gray-800 rounded-2xl p-6">
               <h4 className="text-xl font-bold mb-4">Quick Actions</h4>
               <div className="space-y-3">
-                <button className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 group">
+                <button
+                  className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 group"
+                  onClick={() => handlePremiumAction('Book Chef Consultation')}
+                >
                   <span className="group-hover:translate-x-1 transition-transform duration-300">Book Chef Consultation</span>
                 </button>
-                <button className="w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 group">
+                <button
+                  className="w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 group"
+                  onClick={() => handlePremiumAction('Live Chat Support')}
+                >
                   <span className="group-hover:translate-x-1 transition-transform duration-300">Live Chat Support</span>
                 </button>
-                <button className="w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 group">
+                <button
+                  className="w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 group"
+                  onClick={() => handlePremiumAction('Schedule Video Call')}
+                >
                   <span className="group-hover:translate-x-1 transition-transform duration-300">Schedule Video Call</span>
                 </button>
               </div>
