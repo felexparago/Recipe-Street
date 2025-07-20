@@ -58,6 +58,33 @@ const AdminPanel = () => {
     }
   };
 
+  const handleApproveCourse = (userId: string) => {
+    if (window.confirm('Approve this user for course access?')) {
+      const users = userDatabase.getAllUsers();
+      const userIndex = users.findIndex(u => u.id === userId);
+      if (userIndex !== -1) {
+        users[userIndex].isCourseApproved = true;
+        users[userIndex].courseApprovedAt = new Date().toISOString();
+        localStorage.setItem('recipe_street_users', JSON.stringify(users));
+        loadUsers();
+        loadStats();
+      }
+    }
+  };
+  const handleRejectCourse = (userId: string) => {
+    if (window.confirm('Reject this user\'s course access?')) {
+      const users = userDatabase.getAllUsers();
+      const userIndex = users.findIndex(u => u.id === userId);
+      if (userIndex !== -1) {
+        users[userIndex].isCourseApproved = false;
+        users[userIndex].courseApprovedAt = undefined;
+        localStorage.setItem('recipe_street_users', JSON.stringify(users));
+        loadUsers();
+        loadStats();
+      }
+    }
+  };
+
   const handleExportUsers = () => {
     const data = userDatabase.exportUsers();
     const blob = new Blob([data], { type: 'application/json' });
@@ -221,6 +248,7 @@ const AdminPanel = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Password</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Approval</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Card Info</th>
@@ -260,6 +288,15 @@ const AdminPanel = () => {
                         {user.isApproved ? 'Approved' : 'Pending'}
                       </span>
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        user.isCourseApproved
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {user.isCourseApproved ? 'Course Approved' : 'No Course'}
+                      </span>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatDate(user.createdAt)}
                     </td>
@@ -297,6 +334,22 @@ const AdminPanel = () => {
                             className="text-orange-600 hover:text-orange-900 flex items-center"
                           >
                             <span className="text-xs">✗ Reject</span>
+                          </button>
+                        )}
+                        {!user.isCourseApproved && (
+                          <button
+                            onClick={() => handleApproveCourse(user.id)}
+                            className="text-green-600 hover:text-green-900 flex items-center"
+                          >
+                            <span className="text-xs">✓ Approve Course</span>
+                          </button>
+                        )}
+                        {user.isCourseApproved && (
+                          <button
+                            onClick={() => handleRejectCourse(user.id)}
+                            className="text-orange-600 hover:text-orange-900 flex items-center"
+                          >
+                            <span className="text-xs">✗ Reject Course</span>
                           </button>
                         )}
                         <button

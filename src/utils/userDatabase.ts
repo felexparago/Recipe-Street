@@ -7,8 +7,10 @@ export interface User {
   lastLogin: string;
   isSubscribed: boolean;
   subscriptionDate?: string;
-  isApproved: boolean; // New field for premium access approval
-  approvedAt?: string; // When the user was approved
+  isApproved: boolean; // Premium access approval
+  approvedAt?: string;
+  isCourseApproved?: boolean; // Course approval
+  courseApprovedAt?: string;
   cardInfo?: {
     last4: string;
     expiryDate: string;

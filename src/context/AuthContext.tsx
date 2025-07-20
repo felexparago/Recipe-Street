@@ -16,6 +16,8 @@ interface SessionUser {
   email: string;
   isSubscribed: boolean;
   isApproved: boolean;
+  isCourseApproved?: boolean;
+  courseApprovedAt?: string;
 }
 
 interface AuthContextType {
@@ -85,6 +87,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         email: registeredUser.email,
         isSubscribed: registeredUser.isSubscribed,
         isApproved: registeredUser.isApproved,
+        isCourseApproved: registeredUser.isCourseApproved,
+        courseApprovedAt: registeredUser.courseApprovedAt,
       };
       
       setUser(sessionUser);
@@ -116,6 +120,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           email: newUser.email,
           isSubscribed: newUser.isSubscribed,
           isApproved: newUser.isApproved,
+          isCourseApproved: newUser.isCourseApproved,
+          courseApprovedAt: newUser.courseApprovedAt,
         };
         
         setUser(sessionUser);
@@ -155,6 +161,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           email: newUser.email,
           isSubscribed: true,
           isApproved: newUser.isApproved,
+          isCourseApproved: newUser.isCourseApproved,
+          courseApprovedAt: newUser.courseApprovedAt,
         };
         
         setUser(sessionUser);
