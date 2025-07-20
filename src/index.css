@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optimized scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.5);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.8);
+}
+
+/* Lightweight transitions for recipe cards */
+.recipe-card {
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  will-change: transform;
+}
+
+/* Simple fade-in for recipe grid */
+.recipe-grid {
+  opacity: 1;
+  transition: opacity 0.3s ease-out;
+}
