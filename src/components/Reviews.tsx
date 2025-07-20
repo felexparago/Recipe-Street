@@ -8,7 +8,7 @@ const Reviews = () => {
       name: "Sarah Johnson",
       rating: 5,
       text: "Recipe Street has completely transformed my cooking! The video tutorials are incredibly detailed, and the chef consultations helped me perfect my knife skills. Worth every penny!",
-      image: "/WEBSITE PHOTOS/download (7).png",
+      image: "/download (7).png",
       recipe: "Beef Wellington"
     },
     {
@@ -16,7 +16,7 @@ const Reviews = () => {
       name: "Michael Chen",
       rating: 5,
       text: "As a busy professional, I love how Recipe Street breaks down complex recipes into manageable steps. The premium recipes are restaurant-quality and the ingredients are always perfectly portioned.",
-      image: "/WEBSITE PHOTOS/download (8).png",
+      image: "/download (8).png",
       recipe: "Sushi Master Class"
     },
     {
@@ -24,7 +24,7 @@ const Reviews = () => {
       name: "Emily Rodriguez",
       rating: 5,
       text: "The in-person chef visit was amazing! Chef Maria taught me techniques I never would have learned from videos alone. My dinner parties have never been more impressive.",
-      image: "/WEBSITE PHOTOS/download (9).png",
+      image: "/download (9).png",
       recipe: "French Macarons"
     },
     {
@@ -32,7 +32,7 @@ const Reviews = () => {
       name: "David Thompson",
       rating: 4,
       text: "Great platform with excellent recipe variety. The free recipes are solid, and the premium content is definitely worth the upgrade. Customer service is also very responsive.",
-      image: "/WEBSITE PHOTOS/download (10).png",
+      image: "/download (10).png",
       recipe: "Mediterranean Quinoa Bowl"
     }
   ];

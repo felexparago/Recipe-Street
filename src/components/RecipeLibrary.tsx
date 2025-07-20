@@ -25,7 +25,7 @@ const RecipeLibrary = () => {
       id: 1,
       title: "Beef Wellington",
       description: "Tender beef fillet wrapped in puff pastry with mushroom duxelles",
-      image: "/WEBSITE PHOTOS/recipe 1.jpg",
+      image: "/recipe 1.jpg",
       time: "2 hours",
       servings: 6,
       rating: 4.9,
@@ -58,7 +58,7 @@ const RecipeLibrary = () => {
       id: 2,
       title: "Chocolate Lava Cake",
       description: "Decadent chocolate cake with a molten center, served warm",
-      image: "/WEBSITE PHOTOS/download (3).png",
+      image: "/download (3).png",
       time: "25 min",
       servings: 2,
       rating: 4.7,
@@ -89,7 +89,7 @@ const RecipeLibrary = () => {
       id: 3,
       title: "Chicken Tikka Masala",
       description: "Creamy Indian curry with tender chicken and aromatic spices",
-      image: "/WEBSITE PHOTOS/recipe 7.jpg",
+      image: "/recipe 7.jpg",
       time: "50 min",
       servings: 4,
       rating: 4.7,
@@ -119,7 +119,7 @@ const RecipeLibrary = () => {
       id: 4,
       title: "Sushi Master Class",
       description: "Learn to make authentic nigiri and maki rolls like a professional",
-      image: "/WEBSITE PHOTOS/download (5).png",
+      image: "/download (5).png",
       time: "1.5 hours",
       servings: 4,
       rating: 5.0,
@@ -147,7 +147,7 @@ const RecipeLibrary = () => {
       id: 5,
       title: "Mediterranean Quinoa Bowl",
       description: "Healthy and colorful bowl with roasted vegetables and tahini dressing",
-      image: "/WEBSITE PHOTOS/recipe 8.jpg",
+      image: "/recipe 8.jpg",
       time: "20 min",
       servings: 2,
       rating: 4.6,
@@ -174,7 +174,7 @@ const RecipeLibrary = () => {
       id: 6,
       title: "Lobster Thermidor",
       description: "Luxurious French dish with lobster meat in a rich cream sauce",
-      image: "/WEBSITE PHOTOS/recipe 9.jpg",
+      image: "/recipe 9.jpg",
       time: "1.5 hours",
       servings: 2,
       rating: 5.0,
@@ -199,7 +199,7 @@ const RecipeLibrary = () => {
       id: 7,
       title: "Classic Margherita Pizza",
       description: "Traditional Italian pizza with fresh mozzarella, basil, and tomato sauce",
-      image: "/WEBSITE PHOTOS/download (4).png",
+      image: "/download (4).png",
       time: "30 min",
       servings: 4,
       rating: 4.8,
@@ -228,7 +228,7 @@ const RecipeLibrary = () => {
       id: 8,
       title: "French Macarons",
       description: "Delicate almond cookies with ganache filling in various flavors",
-      image: "/WEBSITE PHOTOS/recipe 5.jpg",
+      image: "/recipe 5.jpg",
       time: "3 hours",
       servings: 24,
       rating: 4.9,
@@ -256,7 +256,7 @@ const RecipeLibrary = () => {
       id: 9,
       title: "Thai Green Curry",
       description: "Aromatic curry with coconut milk, vegetables, and your choice of protein",
-      image: "/WEBSITE PHOTOS/download (1).png",
+      image: "/download (1).png",
       time: "45 min",
       servings: 4,
       rating: 4.7,
@@ -285,7 +285,7 @@ const RecipeLibrary = () => {
       id: 10,
       title: "Truffle Risotto",
       description: "Creamy Italian risotto with black truffle and parmesan cheese",
-      image: "/WEBSITE PHOTOS/recipe 4.jpg",
+      image: "/recipe 4.jpg",
       time: "35 min",
       servings: 3,
       rating: 4.8,
@@ -313,7 +313,7 @@ const RecipeLibrary = () => {
       id: 11,
       title: "Avocado Toast",
       description: "Simple yet delicious breakfast with smashed avocado and poached eggs",
-      image: "/WEBSITE PHOTOS/recipe 1.jpg",
+      image: "/recipe 1.jpg",
       time: "10 min",
       servings: 2,
       rating: 4.5,
@@ -339,7 +339,7 @@ const RecipeLibrary = () => {
       id: 12,
       title: "Chocolate Soufflé",
       description: "Light and airy chocolate soufflé with a molten center",
-      image: "/WEBSITE PHOTOS/download (3).png",
+      image: "/download (3).png",
       time: "40 min",
       servings: 4,
       rating: 4.9,
@@ -366,7 +366,7 @@ const RecipeLibrary = () => {
       id: 13,
       title: "Pad Thai",
       description: "Classic Thai stir-fried rice noodles with eggs, tofu, and peanuts",
-      image: "/WEBSITE PHOTOS/download (4).png",
+      image: "/download (4).png",
       time: "25 min",
       servings: 3,
       rating: 4.6,
@@ -395,7 +395,7 @@ const RecipeLibrary = () => {
       id: 14,
       title: "Beef Bourguignon",
       description: "French beef stew braised in red wine with mushrooms and pearl onions",
-      image: "/WEBSITE PHOTOS/recipe 5.jpg",
+      image: "/recipe 5.jpg",
       time: "3 hours",
       servings: 6,
       rating: 4.9,
@@ -428,7 +428,7 @@ const RecipeLibrary = () => {
       id: 15,
       title: "Greek Salad",
       description: "Fresh Mediterranean salad with feta, olives, and cucumber",
-      image: "/WEBSITE PHOTOS/download (5).png",
+      image: "/download (5).png",
       time: "15 min",
       servings: 4,
       rating: 4.4,
@@ -457,7 +457,7 @@ const RecipeLibrary = () => {
       id: 16,
       title: "Tiramisu",
       description: "Classic Italian dessert with coffee-soaked ladyfingers and mascarpone cream",
-      image: "/WEBSITE PHOTOS/download (11).png",
+      image: "/download (11).png",
       time: "4 hours",
       servings: 8,
       rating: 4.8,
@@ -484,7 +484,7 @@ const RecipeLibrary = () => {
       id: 17,
       title: "Smoothie Bowl",
       description: "Colorful breakfast bowl with fresh fruits and granola",
-      image: "/WEBSITE PHOTOS/download (6).png",
+      image: "/download (6).png",
       time: "10 min",
       servings: 1,
       rating: 4.3,
@@ -509,7 +509,7 @@ const RecipeLibrary = () => {
       id: 18,
       title: "Crème Brûlée",
       description: "Classic French custard dessert with caramelized sugar top",
-      image: "/WEBSITE PHOTOS/recipe 6.jpg",
+      image: "/recipe 6.jpg",
       time: "2 hours",
       servings: 6,
       rating: 4.8,
@@ -534,7 +534,7 @@ const RecipeLibrary = () => {
       id: 19,
       title: "Vegetable Stir Fry",
       description: "Quick and healthy stir-fried vegetables with soy sauce",
-      image: "/WEBSITE PHOTOS/recipe 7.jpg",
+      image: "/recipe 7.jpg",
       time: "20 min",
       servings: 3,
       rating: 4.2,
@@ -561,7 +561,7 @@ const RecipeLibrary = () => {
       id: 20,
       title: "Duck Confit",
       description: "Traditional French duck confit with crispy skin and tender meat",
-      image: "/WEBSITE PHOTOS/recipe 8.jpg",
+      image: "/recipe 8.jpg",
       time: "4 hours",
       servings: 4,
       rating: 4.9,
@@ -588,7 +588,7 @@ const RecipeLibrary = () => {
       id: 21,
       title: "Pancakes",
       description: "Fluffy American pancakes served with maple syrup and butter",
-      image: "/WEBSITE PHOTOS/recipe 9.jpg",
+      image: "/recipe 9.jpg",
       time: "25 min",
       servings: 4,
       rating: 4.4,
@@ -615,7 +615,7 @@ const RecipeLibrary = () => {
       id: 22,
       title: "Beef Tenderloin",
       description: "Perfectly cooked beef tenderloin with red wine reduction sauce",
-      image: "/WEBSITE PHOTOS/download (1).png",
+      image: "/download (1).png",
       time: "1 hour",
       servings: 4,
       rating: 4.9,
@@ -643,7 +643,7 @@ const RecipeLibrary = () => {
       id: 23,
       title: "Caesar Salad",
       description: "Classic Caesar salad with romaine lettuce and parmesan cheese",
-      image: "/WEBSITE PHOTOS/download (11).png",
+      image: "/download (11).png",
       time: "15 min",
       servings: 2,
       rating: 4.3,
@@ -667,7 +667,7 @@ const RecipeLibrary = () => {
       id: 24,
       title: "Chocolate Mousse",
       description: "Light and airy chocolate mousse with whipped cream",
-      image: "/WEBSITE PHOTOS/download (6).png",
+      image: "/download (6).png",
       time: "2 hours",
       servings: 6,
       rating: 4.7,
@@ -773,7 +773,7 @@ const RecipeLibrary = () => {
     id: 'course-1',
     title: "Ultimate Culinary Mastery Course",
     description: "Unlock your culinary potential with our exclusive course! Includes official merch, 1-on-1 sessions with world-class chefs like Gordon Ramsay, and a treasure trove of premium benefits.",
-    image: "/WEBSITE PHOTOS/download (2).png",
+    image: "/download (2).png",
     price: 999,
     benefits: [
       "Official Culinary Mastery Merch Pack",
@@ -788,12 +788,12 @@ const RecipeLibrary = () => {
   };
 
   const filterImages: Record<string, string> = {
-    "Vegetarian": "/WEBSITE PHOTOS/recipe 1.jpg",
-    "Lactose Intolerant": "/WEBSITE PHOTOS/recipe 2.jpg",
-    "Pregnant mothers": "/WEBSITE PHOTOS/recipe 3.jpg", // Pregnant woman eating healthy
-    "Ill people": "/WEBSITE PHOTOS/recipe 4.jpg",
-    "Diet": "/WEBSITE PHOTOS/recipe 5.jpg", // Healthy salad bowl
-    "Nationality food": "/WEBSITE PHOTOS/recipe 6.jpg"
+    "Vegetarian": "/recipe 1.jpg",
+    "Lactose Intolerant": "/recipe 2.jpg",
+    "Pregnant mothers": "/recipe 3.jpg", // Pregnant woman eating healthy
+    "Ill people": "/recipe 4.jpg",
+    "Diet": "/recipe 5.jpg", // Healthy salad bowl
+    "Nationality food": "/recipe 6.jpg"
   };
 
   return (
@@ -875,7 +875,7 @@ const RecipeLibrary = () => {
       {/* Course Marketing Section */}
       <section id="culinary-course" className="relative py-24 bg-gradient-to-br from-yellow-50 via-amber-100 to-orange-50 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <img src="/WEBSITE PHOTOS/recipe 2.jpg" alt="Culinary Mastery" className="w-full h-full object-cover opacity-20" />
+          <img src="/recipe 2.jpg" alt="Culinary Mastery" className="w-full h-full object-cover opacity-20" />
         </div>
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 z-10 flex flex-col md:flex-row items-center gap-12">
           <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left">
@@ -904,7 +904,7 @@ const RecipeLibrary = () => {
           </div>
           <div className="flex-1 flex flex-col items-center">
             <div className="relative w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border-4 border-amber-400 bg-white">
-              <img src="/WEBSITE PHOTOS/download (2).png" alt="Culinary Course" className="w-full h-80 object-cover" />
+              <img src="/download (2).png" alt="Culinary Course" className="w-full h-80 object-cover" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-700/80 to-transparent p-6">
                 <h3 className="text-2xl font-bold text-white mb-2">Ultimate Culinary Mastery Course</h3>
                 <p className="text-lg text-white/90">"Transform your kitchen, your skills, and your life. This is your moment."</p>
@@ -1022,7 +1022,7 @@ const RecipeLibrary = () => {
           <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[95vh] overflow-hidden shadow-2xl relative flex flex-col md:flex-row">
             <div className="flex-1 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-amber-700 via-orange-500 to-yellow-400 relative">
               <img src={course.image} alt={course.title} className="w-64 h-64 object-cover rounded-2xl shadow-xl border-4 border-amber-400 mb-6 z-10 relative" style={{ boxShadow: '0 8px 32px 0 rgba(255, 193, 7, 0.25)' }} />
-              <div className="absolute inset-0 w-full h-full object-cover opacity-20 z-0" style={{ background: 'url(/WEBSITE PHOTOS/recipe 4.jpg) center/cover no-repeat' }}></div>
+              <div className="absolute inset-0 w-full h-full object-cover opacity-20 z-0" style={{ background: 'url(/recipe 4.jpg) center/cover no-repeat' }}></div>
             </div>
             <div className="flex-1 p-8 flex flex-col justify-center">
               <button
