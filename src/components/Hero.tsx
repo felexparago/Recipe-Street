@@ -8,10 +8,7 @@ const Hero = () => {
   const [showTutorial, setShowTutorial] = useState(false);
 
   const handleWatchTutorial = () => {
-    // Open YouTube and search for cooking tutorials
-    const searchQuery = encodeURIComponent('cooking tutorial');
-    const youtubeUrl = `https://www.youtube.com/results?search_query=${searchQuery}`;
-    window.open(youtubeUrl, '_blank');
+    setShowTutorial(true);
   };
 
   const handleExploreRecipes = () => {

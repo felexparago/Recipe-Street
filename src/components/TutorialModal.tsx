@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Play, Pause, RotateCcw, ChefHat } from 'lucide-react';
+import { useRef } from 'react';
 
 interface TutorialModalProps {
   onClose: () => void;
@@ -9,6 +10,9 @@ const TutorialModal: React.FC<TutorialModalProps> = ({ onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
   const tutorialSteps = [
     {
@@ -44,7 +48,7 @@ const TutorialModal: React.FC<TutorialModalProps> = ({ onClose }) => {
   ];
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     
     if (isPlaying) {
       interval = setInterval(() => {
@@ -105,6 +109,56 @@ const TutorialModal: React.FC<TutorialModalProps> = ({ onClose }) => {
         </div>
 
         <div className="p-6">
+          {/* Enhanced Video Player */}
+          <div className="mb-10 flex flex-col items-center">
+            <button
+              onClick={() => window.open('/Video file.mp4', '_blank')}
+              className="mb-4 flex items-center gap-2 bg-gradient-to-r from-amber-600 to-orange-500 text-white px-6 py-2 rounded-full font-semibold shadow hover:from-amber-700 hover:to-orange-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400"
+            >
+              <Play className="h-5 w-5" />
+              Open Video in New Tab
+            </button>
+            <div className="relative w-full max-w-2xl animate-fade-in-up">
+              <div className="bg-gradient-to-r from-amber-400 to-orange-400 p-1 rounded-3xl shadow-2xl">
+                <div className="relative rounded-2xl overflow-hidden bg-black">
+                  <video
+                    ref={videoRef}
+                    src="/Video file.mp4"
+                    poster="/download (12).png"
+                    controls
+                    className="w-full h-80 sm:h-[28rem] object-cover bg-black rounded-2xl"
+                    onPlay={() => { setIsVideoPlaying(true); setHasStarted(true); }}
+                    onPause={() => setIsVideoPlaying(false)}
+                    onEnded={() => setIsVideoPlaying(false)}
+                    onClick={() => {
+                      if (!hasStarted) {
+                        videoRef.current?.play();
+                      }
+                    }}
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                  {/* Play Overlay */}
+                  {!isVideoPlaying && !hasStarted && (
+                    <button
+                      className="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/60 transition-colors duration-200 cursor-pointer"
+                      onClick={() => {
+                        setHasStarted(true);
+                        videoRef.current?.play();
+                      }}
+                      aria-label="Play video"
+                    >
+                      <Play className="h-20 w-20 text-white drop-shadow-lg animate-bounce" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 text-center">
+              <h3 className="text-xl sm:text-2xl font-bold text-amber-700 mb-1 animate-fade-in-up">Exclusive Masterclass Video</h3>
+              <p className="text-gray-600 text-sm sm:text-base animate-fade-in-up">Unlock the secrets of culinary excellence with this premium, step-by-step video guide.</p>
+            </div>
+          </div>
           {/* Main Tutorial Area */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Animation Area */}
